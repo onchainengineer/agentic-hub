@@ -120,7 +120,7 @@ export default function Home() {
             <PathCard
               icon={<BookOpen className="w-6 h-6" />}
               title="Grab a skill"
-              description="151 production-ready Claude Code skills. Drop into .claude/skills/ and gain instant expertise."
+              description="151 production-ready AI agent skills. Works with Claude Code, Cursor, the API, or any agent framework."
               href="/skills/"
               cta={`${skillsStats.total} skills`}
             />
@@ -154,10 +154,9 @@ export default function Home() {
                 {skillsStats.total} skills. One copy-paste away.
               </h2>
               <p className="text-gray-500 max-w-2xl">
-                Production-grade Claude Code skills across {skillsStats.categoryCount} disciplines. Each one is a
-                self-contained persona — drop the markdown file into{" "}
-                <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded font-mono">.claude/skills/</code> and
-                your agent gains that expertise.
+                Production-grade AI agent skills across {skillsStats.categoryCount} disciplines. Each one is a
+                self-contained persona you can drop into Claude Code, Cursor, the Anthropic API, or any
+                framework that takes a system prompt.
               </p>
             </div>
             <Link

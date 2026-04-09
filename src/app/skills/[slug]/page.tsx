@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Copy, FileCode, Hash, Lightbulb } from "lucide-react";
+import { ArrowLeft, Copy, FileCode, Hash, Lightbulb, Terminal } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { CopyButton } from "@/components/CopyButton";
+import { SkillMarkdown } from "@/components/SkillMarkdown";
 import {
   getAllSkills,
   getSkill,
@@ -106,35 +107,61 @@ ${body}`;
             </div>
           </div>
 
-          {/* Copy + Install */}
-          <div className="bg-gray-900 text-white rounded-2xl p-6 mb-8">
-            <div className="flex items-center justify-between mb-3">
+          {/* Use with — tool-agnostic */}
+          <div className="bg-white rounded-2xl border border-gray-200/60 p-6 mb-6">
+            <div className="flex items-start justify-between gap-4 mb-5 flex-wrap">
               <div>
-                <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">
-                  Install
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                  How to use this skill
                 </div>
-                <h2 className="text-lg font-semibold">
-                  Drop into your{" "}
-                  <code className="text-brand-accent-300 font-mono text-base">
-                    .claude/skills/
-                  </code>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Works with any Claude-based agent
                 </h2>
               </div>
               <CopyButton text={fullMarkdown} label="Copy full skill" />
             </div>
 
-            <div className="bg-black/30 rounded-lg p-4 text-xs font-mono text-gray-300 space-y-1">
-              <div><span className="text-gray-500"># 1. Create the skill file</span></div>
-              <div><span className="text-brand-accent-300">mkdir</span> -p .claude/skills/{skill.slug}</div>
-              <div><span className="text-gray-500"># 2. Paste the markdown into:</span></div>
-              <div>.claude/skills/{skill.slug}/SKILL.md</div>
-              <div className="pt-1"><span className="text-gray-500"># 3. Restart Claude Code. The skill is now available.</span></div>
+            <div className="grid md:grid-cols-2 gap-3">
+              <UseCard
+                title="Claude Code"
+                description="Drop into .claude/skills/ as SKILL.md"
+                lines={[
+                  `mkdir -p .claude/skills/${skill.slug}`,
+                  `# paste into .claude/skills/${skill.slug}/SKILL.md`,
+                ]}
+              />
+              <UseCard
+                title="Cursor"
+                description="Paste as a Rule or custom prompt"
+                lines={[
+                  `# Settings → Rules for AI → New rule`,
+                  `# paste the skill body as the rule content`,
+                ]}
+              />
+              <UseCard
+                title="Anthropic API"
+                description="Use as a system prompt in messages.create"
+                lines={[
+                  `client.messages.create(`,
+                  `  model="claude-sonnet-4-6",`,
+                  `  system=open("${skill.slug}.md").read(),`,
+                  `  messages=[...])`,
+                ]}
+              />
+              <UseCard
+                title="Agent SDK / LangChain"
+                description="Inject as the agent's system message"
+                lines={[
+                  `const system = await fs.readFile("${skill.slug}.md", "utf8");`,
+                  `const agent = createAgent({ system, ... });`,
+                ]}
+              />
             </div>
           </div>
 
           {/* Rendered body */}
-          <article className="bg-white rounded-2xl border border-gray-200/60 p-8 prose prose-sm md:prose-base max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-a:text-brand-accent-600 prose-code:text-gray-900 prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-pre:bg-gray-900 prose-pre:text-gray-100">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown>
+          <article className="bg-white rounded-2xl border border-gray-200/60 p-6 md:p-8">
+            <SkillMarkdown>{body}</SkillMarkdown>
           </article>
 
           {/* Related */}
@@ -168,6 +195,33 @@ ${body}`;
       </section>
 
       <Footer />
+    </div>
+  );
+}
+
+function UseCard({
+  title,
+  description,
+  lines,
+}: {
+  title: string;
+  description: string;
+  lines: string[];
+}) {
+  return (
+    <div className="bg-[#0d1117] border border-[#1c2432] rounded-xl overflow-hidden">
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#1c2432] bg-[#161b22]">
+        <Terminal className="w-3.5 h-3.5 text-gray-400" />
+        <span className="text-xs font-semibold text-gray-300">{title}</span>
+        <span className="text-[10px] text-gray-500 ml-auto truncate">{description}</span>
+      </div>
+      <pre className="p-4 text-[11px] leading-relaxed font-mono text-[#e6edf3] overflow-x-auto">
+        {lines.map((line, i) => (
+          <div key={i} className={line.startsWith("#") ? "text-[#7d8590]" : ""}>
+            {line || " "}
+          </div>
+        ))}
+      </pre>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { getAllSkills, getSkillCategories, getSkillsStats } from "@/lib/skills";
 export const metadata = {
   title: "Skills — Agentic Hub",
   description:
-    "151 ready-to-use Claude Code skills across engineering, design, marketing, sales, and more. Copy, paste, and use in your own projects.",
+    "151 ready-to-use AI agent skills across engineering, design, marketing, sales, and more. Works with Claude Code, Cursor, the Anthropic API, or any agent framework.",
 };
 
 export default function SkillsPage() {
@@ -30,9 +30,9 @@ export default function SkillsPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-3">Skills Library</h1>
             <p className="text-gray-500 text-lg max-w-3xl">
-              Production-grade Claude Code skills you can copy into your own projects. Each skill is a
-              self-contained persona with identity, mission, and operating principles — drop the markdown
-              file into <code className="text-sm bg-gray-100 px-1.5 py-0.5 rounded font-mono">.claude/skills/</code> and your agent gains that expertise instantly.
+              Production-grade AI agent skills you can copy into any agent project. Each skill is a
+              self-contained persona with identity, mission, and operating principles. Works with Claude Code,
+              Cursor, the Anthropic API, LangChain, or any framework that accepts a system prompt.
             </p>
           </div>
 
