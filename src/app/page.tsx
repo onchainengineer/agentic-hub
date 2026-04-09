@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Zap, Wand2, Github, TrendingUp, CircleDot, Clock } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Wand2, Github, TrendingUp, CircleDot, Clock, BookOpen } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -12,6 +12,7 @@ import {
   getTopBeginnerProjects,
   getActiveProjects,
 } from "@/lib/data";
+import { getAllSkills, getSkillCategories, getSkillsStats } from "@/lib/skills";
 import { COLLECTIONS } from "@/lib/collections";
 import { formatRelative } from "@/lib/utils";
 
@@ -21,6 +22,24 @@ export default function Home() {
   const topBeginner = getTopBeginnerProjects(3);
   const active = getActiveProjects(3);
   const allProjects = getAllProjects();
+  const allSkills = getAllSkills();
+  const skillCategories = getSkillCategories();
+  const skillsStats = getSkillsStats();
+
+  // Pick 8 featured skills across diverse categories
+  const featuredSkills = [
+    "accessibility-auditor",
+    "engineering-ai-engineer",
+    "sales-account-strategist",
+    "marketing-brand-strategist",
+    "design-visual-designer",
+    "specialized-accounts-payable-agent",
+    "paid-media-creative-strategist",
+    "product-product-manager",
+  ]
+    .map((slug) => allSkills.find((s) => s.slug === slug))
+    .filter((s): s is NonNullable<typeof s> => !!s)
+    .slice(0, 8);
 
   const homeCollections = COLLECTIONS.slice(0, 6);
 
@@ -35,13 +54,13 @@ export default function Home() {
             <span className="text-xs px-3 py-1.5 rounded-full bg-brand-accent-50 text-brand-accent-700 font-medium border border-brand-accent-200 inline-flex items-center gap-1">
               <Sparkles className="w-3 h-3" /> AI-curated weekly
             </span>
+            <span className="text-xs px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 font-medium border border-violet-200 inline-flex items-center gap-1">
+              <BookOpen className="w-3 h-3" />
+              {skillsStats.total} ready-to-use skills
+            </span>
             <span className="text-xs px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200 inline-flex items-center gap-1">
               <CircleDot className="w-3 h-3" />
               {stats.goodFirstIssues} good first issues
-            </span>
-            <span className="text-xs px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-medium border border-blue-200 inline-flex items-center gap-1">
-              <CircleDot className="w-3 h-3" />
-              {stats.helpWanted} help wanted
             </span>
             <span className="text-xs px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 font-medium border border-amber-200 inline-flex items-center gap-1">
               <Clock className="w-3 h-3" />
@@ -89,30 +108,109 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             <PathCard
               icon={<Wand2 className="w-6 h-6" />}
-              title="Take the finder quiz"
-              description="Answer 4 questions about your language, time, and interests. Get a ranked list of projects that match you."
+              title="Find your match"
+              description="Answer 4 questions. Get a ranked list of projects that match your language, time, and interests."
               href="/find/"
               cta="Start quiz"
               highlight
             />
             <PathCard
+              icon={<BookOpen className="w-6 h-6" />}
+              title="Grab a skill"
+              description="151 production-ready Claude Code skills. Drop into .claude/skills/ and gain instant expertise."
+              href="/skills/"
+              cta={`${skillsStats.total} skills`}
+            />
+            <PathCard
               icon={<Sparkles className="w-6 h-6" />}
-              title="Browse curated collections"
-              description="Hand-picked groupings like 'Perfect first PR', 'Active this week', and 'Build an MCP server'."
+              title="Browse collections"
+              description="Hand-picked groupings like 'Perfect first PR', 'Active this week', 'Build an MCP server'."
               href="/collections/"
               cta={`${COLLECTIONS.length} collections`}
             />
             <PathCard
               icon={<TrendingUp className="w-6 h-6" />}
-              title="See everything"
-              description="All tracked projects with powerful filters: language, category, issue counts, recency."
+              title="See all projects"
+              description="All tracked agentic AI projects with powerful filters: language, category, recency."
               href="/projects/"
               cta={`${stats.totalProjects} projects`}
             />
           </div>
+        </div>
+      </section>
+
+      {/* Skills showcase */}
+      <section className="py-16 border-t border-gray-200/60 bg-gradient-to-b from-white to-brand-neutral-100">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-violet-50 text-violet-700 font-medium border border-violet-200 mb-3">
+                <BookOpen className="w-3 h-3" /> Skills Library
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">
+                {skillsStats.total} skills. One copy-paste away.
+              </h2>
+              <p className="text-gray-500 max-w-2xl">
+                Production-grade Claude Code skills across {skillsStats.categoryCount} disciplines. Each one is a
+                self-contained persona — drop the markdown file into{" "}
+                <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded font-mono">.claude/skills/</code> and
+                your agent gains that expertise.
+              </p>
+            </div>
+            <Link
+              href="/skills/"
+              className="inline-flex items-center gap-1 text-sm text-brand-accent-600 hover:text-brand-accent-700 font-medium"
+            >
+              Browse all skills <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Category pills */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {skillCategories.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/skills/?category=${c.slug}`}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-sm text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+              >
+                {c.label}
+                <span className="text-xs text-gray-400 font-mono">{c.count}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Featured skills grid */}
+          {featuredSkills.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {featuredSkills.map((skill) => (
+                <Link
+                  key={skill.slug}
+                  href={`/skills/${skill.slug}/`}
+                  className="group block bg-white border border-gray-200/60 rounded-xl p-4 hover:border-gray-300 hover:shadow-md transition-all"
+                >
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-xl mb-3 bg-gray-50"
+                    style={
+                      skill.color
+                        ? { backgroundColor: `${skill.color}15` }
+                        : {}
+                    }
+                  >
+                    {skill.emoji || "⚡"}
+                  </div>
+                  <div className="font-semibold text-sm text-gray-900 group-hover:text-brand-accent-600 transition-colors mb-0.5 line-clamp-1">
+                    {skill.name}
+                  </div>
+                  <div className="text-xs text-gray-500 line-clamp-2">
+                    {skill.description}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
