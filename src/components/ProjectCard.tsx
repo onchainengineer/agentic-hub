@@ -6,6 +6,7 @@ import { formatStars, formatRelative } from "@/lib/utils";
 export function ProjectCard({ project }: { project: Project }) {
   const cat = CATEGORY_META[project.category];
   const gfi = project.goodFirstIssues ?? 0;
+  const hw = project.helpWanted ?? 0;
 
   return (
     <Link
@@ -44,16 +45,18 @@ export function ProjectCard({ project }: { project: Project }) {
         <span className="ml-auto">{formatRelative(project.pushedAt)}</span>
       </div>
 
-      <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
-        {gfi > 0 ? (
+      <div className="flex items-center gap-1.5 pt-3 border-t border-gray-100 flex-wrap">
+        {gfi > 0 && (
           <span className="text-xs px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 font-medium">
-            {gfi} good first issue{gfi === 1 ? "" : "s"}
+            {gfi} good first
           </span>
-        ) : project.helpWanted > 0 ? (
+        )}
+        {hw > 0 && (
           <span className="text-xs px-2 py-1 rounded-md bg-blue-50 text-blue-700 font-medium">
-            {project.helpWanted} help wanted
+            {hw} help wanted
           </span>
-        ) : (
+        )}
+        {gfi === 0 && hw === 0 && (
           <span className="text-xs px-2 py-1 rounded-md bg-gray-50 text-gray-500">
             No open beginner issues
           </span>

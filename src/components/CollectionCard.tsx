@@ -39,10 +39,8 @@ export function CollectionCard({
   const Icon = ICONS[collection.icon] || Sparkles;
   const color = COLOR_MAP[collection.color] || COLOR_MAP.blue;
   const count = projects.length;
-  const totalIssues = projects.reduce(
-    (sum, p) => sum + (p.goodFirstIssues ?? 0) + (p.helpWanted ?? 0),
-    0,
-  );
+  const totalGfi = projects.reduce((sum, p) => sum + (p.goodFirstIssues ?? 0), 0);
+  const totalHw = projects.reduce((sum, p) => sum + (p.helpWanted ?? 0), 0);
 
   return (
     <Link
@@ -70,13 +68,18 @@ export function CollectionCard({
       )}
 
       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-        <div className="flex items-center gap-3 text-xs text-gray-600">
+        <div className="flex items-center gap-2 text-xs text-gray-600 flex-wrap">
           <span>
             <span className="font-semibold text-gray-900">{count}</span> projects
           </span>
-          {totalIssues > 0 && (
-            <span>
-              <span className="font-semibold text-emerald-600">{totalIssues}</span> open issues
+          {totalGfi > 0 && (
+            <span className="text-emerald-700">
+              <span className="font-semibold">{totalGfi}</span> good first
+            </span>
+          )}
+          {totalHw > 0 && (
+            <span className="text-blue-700">
+              <span className="font-semibold">{totalHw}</span> help wanted
             </span>
           )}
         </div>

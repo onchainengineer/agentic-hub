@@ -39,10 +39,8 @@ export default function CollectionDetail({ params }: { params: { slug: string } 
 
   const projects = collection.filter(getAllProjects());
   const Icon = ICONS[collection.icon] || Sparkles;
-  const totalIssues = projects.reduce(
-    (sum, p) => sum + (p.goodFirstIssues ?? 0) + (p.helpWanted ?? 0),
-    0,
-  );
+  const totalGfi = projects.reduce((sum, p) => sum + (p.goodFirstIssues ?? 0), 0);
+  const totalHw = projects.reduce((sum, p) => sum + (p.helpWanted ?? 0), 0);
 
   const otherCollections = COLLECTIONS.filter((c) => c.slug !== collection.slug).slice(0, 4);
 
@@ -68,13 +66,18 @@ export default function CollectionDetail({ params }: { params: { slug: string } 
                 <h1 className="text-3xl md:text-4xl font-bold mb-1">{collection.name}</h1>
                 <p className="text-gray-500 mb-4">{collection.tagline}</p>
                 <p className="text-gray-700 leading-relaxed mb-5">{collection.description}</p>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="text-gray-700">
+                <div className="flex items-center gap-2 text-sm flex-wrap">
+                  <span className="text-gray-700 px-3 py-1 rounded-md bg-gray-50 border border-gray-100">
                     <span className="font-semibold text-gray-900">{projects.length}</span> projects
                   </span>
-                  {totalIssues > 0 && (
-                    <span className="text-gray-700">
-                      <span className="font-semibold text-emerald-600">{totalIssues}</span> open beginner issues
+                  {totalGfi > 0 && (
+                    <span className="text-emerald-700 px-3 py-1 rounded-md bg-emerald-50 border border-emerald-100">
+                      <span className="font-semibold">{totalGfi}</span> good first issues
+                    </span>
+                  )}
+                  {totalHw > 0 && (
+                    <span className="text-blue-700 px-3 py-1 rounded-md bg-blue-50 border border-blue-100">
+                      <span className="font-semibold">{totalHw}</span> help wanted
                     </span>
                   )}
                 </div>
