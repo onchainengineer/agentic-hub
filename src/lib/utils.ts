@@ -6,10 +6,21 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatStars(n: number): string {
-  if (n >= 1000) {
-    return `${(n / 1000).toFixed(1)}k`;
-  }
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 10_000) return `${Math.round(n / 1000)}k`;
+  if (n >= 1_000) return `${(n / 1000).toFixed(1)}k`;
   return String(n);
+}
+
+export function formatNumber(n: number): string {
+  return new Intl.NumberFormat("en-US").format(n);
+}
+
+export function daysSince(iso: string): number {
+  if (!iso) return 9999;
+  const dt = new Date(iso);
+  if (Number.isNaN(dt.getTime())) return 9999;
+  return (Date.now() - dt.getTime()) / 86_400_000;
 }
 
 export function formatRelative(iso: string): string {
