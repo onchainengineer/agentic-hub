@@ -37,7 +37,11 @@ export default function Home() {
             </span>
             <span className="text-xs px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200 inline-flex items-center gap-1">
               <CircleDot className="w-3 h-3" />
-              {stats.openBeginnerIssues} open beginner issues
+              {stats.goodFirstIssues} good first issues
+            </span>
+            <span className="text-xs px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-medium border border-blue-200 inline-flex items-center gap-1">
+              <CircleDot className="w-3 h-3" />
+              {stats.helpWanted} help wanted
             </span>
             <span className="text-xs px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 font-medium border border-amber-200 inline-flex items-center gap-1">
               <Clock className="w-3 h-3" />

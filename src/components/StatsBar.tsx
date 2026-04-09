@@ -3,14 +3,15 @@ import { Package, CircleDot, Zap, Clock } from "lucide-react";
 
 type Stats = {
   totalProjects: number;
-  openBeginnerIssues: number;
+  goodFirstIssues: number;
+  helpWanted: number;
   activeThisWeek: number;
   generatedAt: string;
 };
 
 export function StatsBar({ stats }: { stats: Stats }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
       <Stat
         icon={<Package className="w-4 h-4" />}
         label="Projects curated"
@@ -19,15 +20,23 @@ export function StatsBar({ stats }: { stats: Stats }) {
       />
       <Stat
         icon={<CircleDot className="w-4 h-4 text-emerald-500" />}
-        label="Open beginner issues"
-        value={stats.openBeginnerIssues}
-        hint="Good first issue + help wanted"
+        label="Good first issues"
+        value={stats.goodFirstIssues}
+        hint="Beginner-scoped tasks"
+        accent="emerald"
+      />
+      <Stat
+        icon={<CircleDot className="w-4 h-4 text-blue-500" />}
+        label="Help wanted"
+        value={stats.helpWanted}
+        hint="Maintainers want help"
+        accent="blue"
       />
       <Stat
         icon={<Zap className="w-4 h-4 text-amber-500" />}
         label="Active this week"
         value={stats.activeThisWeek}
-        hint="Commits in last 7 days"
+        hint="Pushed in last 7 days"
       />
       <Stat
         icon={<Clock className="w-4 h-4 text-brand-accent-600" />}
@@ -46,13 +55,21 @@ function Stat({
   value,
   hint,
   isText,
+  accent,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string | number;
   hint?: string;
   isText?: boolean;
+  accent?: "emerald" | "blue";
 }) {
+  const valueColor =
+    accent === "emerald"
+      ? "text-emerald-700"
+      : accent === "blue"
+      ? "text-blue-700"
+      : "text-gray-900";
   return (
     <div className="bg-white rounded-2xl border border-gray-200/60 p-5">
       <div className="flex items-center gap-2 mb-2">
@@ -61,7 +78,11 @@ function Stat({
           {label}
         </div>
       </div>
-      <div className={`font-bold text-gray-900 mb-1 ${isText ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"}`}>
+      <div
+        className={`font-bold ${valueColor} mb-1 ${
+          isText ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"
+        }`}
+      >
         {value}
       </div>
       {hint && <div className="text-[11px] text-gray-400">{hint}</div>}

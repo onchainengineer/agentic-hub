@@ -362,9 +362,13 @@ function Results({ matches, answers }: { matches: ScoredProject[]; answers: Answ
                       <span className="font-mono">{p.language}</span>
                       <span>{formatStars(p.stars)} ★</span>
                       {(p.goodFirstIssues ?? 0) > 0 && (
-                        <span className="text-emerald-600 font-medium">
-                          {p.goodFirstIssues} good first issue
-                          {p.goodFirstIssues === 1 ? "" : "s"}
+                        <span className="text-emerald-700 font-medium">
+                          {p.goodFirstIssues} good first
+                        </span>
+                      )}
+                      {(p.helpWanted ?? 0) > 0 && (
+                        <span className="text-blue-700 font-medium">
+                          {p.helpWanted} help wanted
                         </span>
                       )}
                       <span>updated {formatRelative(p.pushedAt)}</span>

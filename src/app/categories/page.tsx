@@ -28,6 +28,7 @@ export default function CategoriesPage() {
     const catProjects = projects.filter((p) => p.category === c);
     const totalStars = catProjects.reduce((sum, p) => sum + p.stars, 0);
     const totalGfi = catProjects.reduce((sum, p) => sum + (p.goodFirstIssues || 0), 0);
+    const totalHw = catProjects.reduce((sum, p) => sum + (p.helpWanted || 0), 0);
     return {
       key: c,
       meta: CATEGORY_META[c],
@@ -35,6 +36,7 @@ export default function CategoriesPage() {
       count: catProjects.length,
       totalStars,
       totalGfi,
+      totalHw,
       topProjects: catProjects.sort((a, b) => b.stars - a.stars).slice(0, 3),
     };
   }).filter((c) => c.count > 0);
@@ -71,7 +73,7 @@ export default function CategoriesPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 mb-4">
+                <div className="grid grid-cols-4 gap-2 mb-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-gray-900">{c.count}</div>
                     <div className="text-[10px] text-gray-500 uppercase">Projects</div>
@@ -83,6 +85,10 @@ export default function CategoriesPage() {
                   <div className="text-center">
                     <div className="text-2xl font-bold text-emerald-600">{c.totalGfi}</div>
                     <div className="text-[10px] text-gray-500 uppercase">Good First</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">{c.totalHw}</div>
+                    <div className="text-[10px] text-gray-500 uppercase">Help Wanted</div>
                   </div>
                 </div>
 
